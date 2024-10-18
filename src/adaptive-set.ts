@@ -1,7 +1,17 @@
 /**
  * `Single` is a set that contains only one item.
  */
-class Single<T> {
+export interface Single<T> {
+  value: T;
+  [Symbol.iterator](): Iterator<T>;
+}
+
+/**
+ * AdaptiveSet is a set that can be a `Set`, `Single`, or `undefined`.
+ */
+export type AdaptiveSet<T> = Set<T> | Single<T> | undefined;
+
+class SingleImpl<T> implements Single<T> {
   public constructor(public readonly value: T) {}
 
   *[Symbol.iterator](): Iterator<T> {
@@ -9,20 +19,13 @@ class Single<T> {
   }
 }
 
-export type { Single };
-
-/**
- * AdaptiveSet is a set that can be a `Set`, `Single`, or `undefined`.
- */
-export type AdaptiveSet<T> = Set<T> | Single<T> | undefined;
-
 /**
  * Check if an AdaptiveSet is a `Single`.
  * @param col An AdaptiveSet.
  * @returns `true` if the AdaptiveSet is a `Single`, otherwise `false`.
  */
 export const isSingle = <T>(col: AdaptiveSet<T>): col is Single<T> =>
-  col instanceof Single;
+  col instanceof SingleImpl;
 
 /**
  * Get the size of an AdaptiveSet.
@@ -49,7 +52,7 @@ export const has = <T>(col: AdaptiveSet<T>, value: T): boolean =>
  */
 export const add = <T>(col: AdaptiveSet<T>, value: T): Single<T> | Set<T> =>
   !col
-    ? new Single(value)
+    ? new SingleImpl(value)
     : isSingle(col)
       ? new Set([col.value, value])
       : col.add(value);
