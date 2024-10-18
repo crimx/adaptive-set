@@ -6,7 +6,15 @@
 [![Coverage Status](https://img.shields.io/coverallsCoverage/github/crimx/adaptive-set)](https://coveralls.io/github/crimx/adaptive-set)
 [![minified-size](https://img.shields.io/bundlephobia/minzip/adaptive-set)](https://bundlephobia.com/package/adaptive-set)
 
-Utils for implementing a Set data structure that dynamically adjusts its internal representation based on the number of elements it contains.
+A set of utils for implementing specialized `Set` data structure designed to optimize memory usage and performance based on the number of elements it contains.
+It adapts its internal representation to efficiently handle cases where there are no items, a single item, or multiple items.
+
+- **No Items**: When the set is empty, it uses an `undefined` value to represent the absence of elements, minimizing memory usage.
+- **Single Item**: When the set contains exactly one item, it uses a lightweight `Single` class to store the single element, providing quick access and iteration.
+- **Multiple Items**: When the set contains more than one item, it switches to using a standard `Set` to leverage its efficient handling of multiple elements.
+
+This adaptive approach ensures that the it remains efficient and performant across different usage scenarios,
+making it an ideal choice for applications where the number of elements can vary significantly.
 
 ## Install
 
@@ -14,16 +22,42 @@ Utils for implementing a Set data structure that dynamically adjusts its interna
 npm add adaptive-set
 ```
 
-## Publish New Version
+## Example
 
-You can use [npm version](https://docs.npmjs.com/cli/v10/commands/npm-version) to bump version.
+```ts
+import { add, has, remove, size, type AdaptiveSet } from "adaptive-set";
 
-```
-npm version patch
-```
+type Fn = () => void;
 
-Push the tag to remote and CI will publish the new version to npm.
+class MyClass {
+  private listeners?: AdaptiveSet<Fn>;
 
-```
-git push --follow-tags
+  public notify(): void {
+    if (this.listeners) {
+      for (const listener of this.listeners) {
+        listener();
+      }
+    }
+  }
+
+  public addListener(listener: Fn): void {
+    this.listeners = add(this.listeners, listener);
+  }
+
+  public removeListener(listener: Fn): void {
+    this.listeners = remove(this.listeners, listener);
+  }
+
+  public hasListener(listener: Fn): boolean {
+    return has(this.listeners, listener);
+  }
+
+  public getListenerCount(): number {
+    return size(this.listeners);
+  }
+
+  public clearListeners(): void {
+    this.listeners = undefined;
+  }
+}
 ```
