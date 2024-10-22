@@ -13,7 +13,7 @@ describe("adaptive-set", () => {
       col = add(col, 1);
 
       expect(isSingle(col)).toBe(true);
-      expect(col).toEqual({ value: 1 });
+      expect([...col]).toEqual([1]);
     });
 
     it("should be be Set on second add", () => {
@@ -52,12 +52,12 @@ describe("adaptive-set", () => {
       col = add(col, value);
 
       expect(isSingle(col)).toBe(true);
-      expect(col).toEqual({ value });
+      expect([...col]).toEqual([value]);
 
       col = remove(col, {});
 
       expect(isSingle(col)).toBe(true);
-      expect(col).toEqual({ value });
+      expect([...col!]).toEqual([value]);
 
       col = remove(col, value);
       expect(col).toBeUndefined();

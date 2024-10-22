@@ -1,31 +1,20 @@
 /**
  * `Single` is a set that contains only one item.
  */
-export interface Single<T> {
-  value: T;
-  [Symbol.iterator](): Iterator<T>;
-}
+export type Single<T> = [T];
 
 /**
  * AdaptiveSet is a set that can be a `Set`, `Single`, or `undefined`.
  */
 export type AdaptiveSet<T> = Set<T> | Single<T> | undefined;
 
-class SingleImpl<T> implements Single<T> {
-  public constructor(public readonly value: T) {}
-
-  *[Symbol.iterator](): Iterator<T> {
-    yield this.value;
-  }
-}
-
 /**
  * Check if an AdaptiveSet is a `Single`.
  * @param col An AdaptiveSet.
  * @returns `true` if the AdaptiveSet is a `Single`, otherwise `false`.
  */
-export const isSingle = <T>(col: AdaptiveSet<T>): col is Single<T> =>
-  col instanceof SingleImpl;
+export const isSingle: <T>(col: AdaptiveSet<T>) => col is Single<T> =
+  Array.isArray as never;
 
 /**
  * Get the size of an AdaptiveSet.
@@ -42,7 +31,7 @@ export const size = <T>(col: AdaptiveSet<T>): number =>
  * @returns `true` if the value exists, otherwise `false`.
  */
 export const has = <T>(col: AdaptiveSet<T>, value: T): boolean =>
-  !!col && (isSingle(col) ? col.value === value : col.has(value));
+  !!col && (isSingle(col) ? col[0] === value : col.has(value));
 
 /**
  * Add an item to an AdaptiveSet.
@@ -51,11 +40,7 @@ export const has = <T>(col: AdaptiveSet<T>, value: T): boolean =>
  * @returns The updated AdaptiveSet.
  */
 export const add = <T>(col: AdaptiveSet<T>, value: T): Single<T> | Set<T> =>
-  !col
-    ? new SingleImpl(value)
-    : isSingle(col)
-      ? new Set([col.value, value])
-      : col.add(value);
+  !col ? [value] : isSingle(col) ? new Set([col[0], value]) : col.add(value);
 
 /**
  * Remove an item from an AdaptiveSet.
@@ -72,7 +57,7 @@ export const remove = <T>(
   col &&
   ((
     isSingle(col)
-      ? !Object.is(col.value, value)
+      ? !Object.is(col[0], value)
       : (col.delete(value), !drop || col.size)
   )
     ? col
