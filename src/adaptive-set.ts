@@ -6,7 +6,7 @@ export type Single<T> = [T];
 /**
  * AdaptiveSet is a set that can be a `Set`, `Single`, or `undefined`.
  */
-export type AdaptiveSet<T> = Set<T> | Single<T> | undefined;
+export type AdaptiveSet<T> = Set<T> | Single<T> | undefined | null;
 
 /**
  * Check if an AdaptiveSet is a `Single`.
@@ -60,5 +60,5 @@ export const remove = <T>(
       ? Object.is(col[0], value)
       : (col.delete(value), drop && !col.size)
   )
-    ? undefined
+    ? null
     : col);

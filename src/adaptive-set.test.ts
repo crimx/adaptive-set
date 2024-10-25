@@ -60,7 +60,7 @@ describe("adaptive-set", () => {
       expect([...col!]).toEqual([value]);
 
       col = remove(col, value);
-      expect(col).toBeUndefined();
+      expect(col).toBeFalsy();
     });
 
     it("should remove items from Set", () => {
@@ -104,7 +104,7 @@ describe("adaptive-set", () => {
       expect([...col!]).toEqual([2]);
 
       col = remove(col, 2, true);
-      expect(col).toBe(undefined);
+      expect(col).toBeFalsy();
     });
   });
 
@@ -189,7 +189,7 @@ describe("adaptive-set", () => {
       expect([...col]).toEqual([3]);
 
       col = remove(col, 3, true);
-      expect(col).toBeUndefined();
+      expect(col).toBeFalsy();
     });
   });
 });
