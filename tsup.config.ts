@@ -2,6 +2,8 @@ import { defineConfig } from "tsup";
 
 import mangleCache from "./mangle-cache.json";
 
+const minify = Boolean(process.env.MINIFY);
+
 export default defineConfig({
   entry: ["src/index.ts"],
   format: ["cjs", "esm"],
@@ -10,8 +12,8 @@ export default defineConfig({
   treeshake: true,
   dts: true,
   splitting: false,
-  sourcemap: true,
-  minify: Boolean(process.env.MINIFY),
+  sourcemap: !minify,
+  minify,
   esbuildOptions: options => {
     options.sourcesContent = false;
     options.mangleProps = /[^_]_$/;
