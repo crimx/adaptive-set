@@ -7,7 +7,7 @@
 It adapts its internal representation to efficiently handle cases where there are no items, a single item, or multiple items.</p>
 <ul>
 <li><strong>No Items</strong>: When the set is empty, it uses an <code>undefined</code> value to represent the absence of elements, minimizing memory usage.</li>
-<li><strong>Single Item</strong>: When the set contains exactly one item, it uses a lightweight <code>Single</code> class to store the single element, providing quick access and iteration.</li>
+<li><strong>Single Item</strong>: When the set contains exactly one item, it uses a array <code>[item]</code> to store the single element, providing quick access and iteration.</li>
 <li><strong>Multiple Items</strong>: When the set contains more than one item, it switches to using a standard <code>Set</code> to leverage its efficient handling of multiple elements.</li>
 </ul>
 <p>This adaptive approach ensures that the it remains efficient and performant across different usage scenarios,
