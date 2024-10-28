@@ -62,3 +62,13 @@ export const remove = <T>(
   )
     ? null
     : col);
+
+/**
+ * Clear an AdaptiveSet. Returns the cleared `Set` if `col` is a `Set`.
+ *
+ * Tip: If you don't want to reuse a cleared `Set`, just `s = null`.
+ * @param col
+ * @returns
+ */
+export const clear = <T>(col: AdaptiveSet<T>): AdaptiveSet<T> =>
+  col && !isSingle(col) ? (col.clear(), col) : null;

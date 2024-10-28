@@ -10,7 +10,7 @@ A set of utils for implementing specialized `Set` data structure designed to opt
 It adapts its internal representation to efficiently handle cases where there are no items, a single item, or multiple items.
 
 - **No Items**: When the set is empty, it uses an `undefined` value to represent the absence of elements, minimizing memory usage.
-- **Single Item**: When the set contains exactly one item, it uses a lightweight `Single` class to store the single element, providing quick access and iteration.
+- **Single Item**: When the set contains exactly one item, it uses a array `[item]` to store the single element, providing quick access and iteration.
 - **Multiple Items**: When the set contains more than one item, it switches to using a standard `Set` to leverage its efficient handling of multiple elements.
 
 This adaptive approach ensures that the it remains efficient and performant across different usage scenarios,
