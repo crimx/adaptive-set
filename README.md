@@ -4,7 +4,7 @@
 [![Build Status](https://github.com/crimx/adaptive-set/actions/workflows/build.yml/badge.svg)](https://github.com/crimx/adaptive-set/actions/workflows/build.yml)
 [![npm-version](https://img.shields.io/npm/v/adaptive-set.svg)](https://www.npmjs.com/package/adaptive-set)
 [![Coverage Status](https://img.shields.io/coverallsCoverage/github/crimx/adaptive-set)](https://coveralls.io/github/crimx/adaptive-set)
-[![minified-size](https://img.shields.io/bundlephobia/minzip/adaptive-set)](https://bundlephobia.com/package/adaptive-set)
+[![minified-size](https://deno.bundlejs.com/badge?q=adaptive-set&treeshake=[*])](https://bundlejs.com/?q=adaptive-set&treeshake=[*])
 
 A set of utils for implementing specialized `Set` data structure designed to optimize memory usage and performance based on the number of elements it contains.
 It adapts its internal representation to efficiently handle cases where there are no items, a single item, or multiple items.
