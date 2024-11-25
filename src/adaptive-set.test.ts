@@ -1,15 +1,12 @@
-import type { AdaptiveSet } from ".";
-
 import { describe, expect, it } from "vitest";
 
-import { add, clear, has, isSingle, remove, size } from ".";
+import { type AdaptiveSet, add, clear, has, isSingle, remove, size } from ".";
 
 describe("adaptive-set", () => {
   describe("add", () => {
     it("should be be Single on first add", () => {
       let col: AdaptiveSet<number>;
 
-      // eslint-disable-next-line prefer-const
       col = add(col, 1);
 
       expect(isSingle(col)).toBe(true);
@@ -38,7 +35,6 @@ describe("adaptive-set", () => {
     it("should remove item from empty set", () => {
       let col: AdaptiveSet<number>;
 
-      // eslint-disable-next-line prefer-const
       col = remove(col, 1);
 
       expect(col).toBeUndefined();
@@ -91,7 +87,6 @@ describe("adaptive-set", () => {
       it("should clear empty", () => {
         let col: AdaptiveSet<number>;
 
-        // eslint-disable-next-line prefer-const
         col = clear(col);
         expect(col).toBeFalsy();
       });

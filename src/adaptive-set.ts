@@ -1,28 +1,26 @@
 /**
+ * AdaptiveSet is a set that can be a `Set`, `Single`, or `undefined`.
+ */
+export type AdaptiveSet<T> = null | Set<T> | Single<T> | undefined;
+
+/**
  * `Single` is a set that contains only one item.
  */
 export type Single<T> = [T];
-
-/**
- * AdaptiveSet is a set that can be a `Set`, `Single`, or `undefined`.
- */
-export type AdaptiveSet<T> = Set<T> | Single<T> | undefined | null;
 
 /**
  * Check if an AdaptiveSet is a `Single`.
  * @param col An AdaptiveSet.
  * @returns `true` if the AdaptiveSet is a `Single`, otherwise `false`.
  */
-export const isSingle: <T>(col: AdaptiveSet<T>) => col is Single<T> =
-  Array.isArray as never;
+export const isSingle: <T>(col: AdaptiveSet<T>) => col is Single<T> = Array.isArray as never;
 
 /**
  * Get the size of an AdaptiveSet.
  * @param col An AdaptiveSet.
  * @returns The size of the AdaptiveSet.
  */
-export const size = <T>(col: AdaptiveSet<T>): number =>
-  col ? (isSingle(col) ? 1 : col.size) : 0;
+export const size = <T>(col: AdaptiveSet<T>): number => (col ? (isSingle(col) ? 1 : col.size) : 0);
 
 /**
  * Check if an item exists in an AdaptiveSet.
@@ -39,7 +37,7 @@ export const has = <T>(col: AdaptiveSet<T>, value: T): boolean =>
  * @param value Value to add.
  * @returns The updated AdaptiveSet.
  */
-export const add = <T>(col: AdaptiveSet<T>, value: T): Single<T> | Set<T> =>
+export const add = <T>(col: AdaptiveSet<T>, value: T): Set<T> | Single<T> =>
   col ? (isSingle(col) ? new Set(col) : col).add(value) : [value];
 
 /**
@@ -49,19 +47,8 @@ export const add = <T>(col: AdaptiveSet<T>, value: T): Single<T> | Set<T> =>
  * @param drop If true, returns `undefined` when empty, otherwise returns `col`. Default is `false`.
  * @returns The updated AdaptiveSet.
  */
-export const remove = <T>(
-  col: AdaptiveSet<T>,
-  value: T,
-  drop?: boolean
-): AdaptiveSet<T> =>
-  col &&
-  ((
-    isSingle(col)
-      ? Object.is(col[0], value)
-      : (col.delete(value), drop && !col.size)
-  )
-    ? null
-    : col);
+export const remove = <T>(col: AdaptiveSet<T>, value: T, drop?: boolean): AdaptiveSet<T> =>
+  col && ((isSingle(col) ? Object.is(col[0], value) : (col.delete(value), drop && !col.size)) ? null : col);
 
 /**
  * Clear an AdaptiveSet. Returns the cleared `Set` if `col` is a `Set`.
@@ -70,5 +57,4 @@ export const remove = <T>(
  * @param col
  * @returns
  */
-export const clear = <T>(col: AdaptiveSet<T>): AdaptiveSet<T> =>
-  col && !isSingle(col) ? (col.clear(), col) : null;
+export const clear = <T>(col: AdaptiveSet<T>): AdaptiveSet<T> => (col && !isSingle(col) ? (col.clear(), col) : null);

@@ -1,86 +1,73 @@
 import jsEslint from "@eslint/js";
+import gitignore from "eslint-config-flat-gitignore";
 import eslintConfigPrettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
+import perfectionist from "eslint-plugin-perfectionist";
 import tsEslint from "typescript-eslint";
 
 export default tsEslint.config(
   jsEslint.configs.recommended,
   ...tsEslint.configs.recommended,
-  importPlugin.flatConfigs.recommended,
-  importPlugin.flatConfigs.typescript,
   eslintConfigPrettier,
-  {
-    ignores: ["**/dist/", "**/public/", "**/docs/", "**/node_modules/"],
-  },
+  importPlugin.flatConfigs.recommended,
+  perfectionist.configs["recommended-natural"],
+  gitignore(),
   {
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "module",
       globals: {
         console: true,
         process: true,
       },
+      sourceType: "module",
     },
     rules: {
+      "prefer-const": "off",
+      "sort-imports": "off",
+    },
+  },
+  {
+    rules: {
+      "import/consistent-type-specifier-style": ["error", "prefer-inline"],
+      "import/no-duplicates": ["error", { considerQueryString: true, "prefer-inline": true }],
       "import/no-unresolved": "off",
-      "import/newline-after-import": [
-        "error",
-        { considerComments: true, count: 1 },
-      ],
-      "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
-      "import/no-duplicates": ["error", { considerQueryString: true }],
-      "import/order": [
+      "perfectionist/sort-imports": [
         "error",
         {
-          "newlines-between": "always",
-          alphabetize: { order: "asc", caseInsensitive: true },
           groups: [
+            "side-effect-style",
+            "style",
+            ["builtin-type", "external-type", "internal-type", "parent-type", "sibling-type", "index-type"],
+            ["builtin", "external"],
+            ["internal", "parent", "sibling", "index"],
             "object",
-            "type",
-            ["builtin", "external", "internal"],
-            ["parent", "sibling", "index"],
+            "unknown",
           ],
-          pathGroups: [
-            {
-              pattern: "*.+(scss|css|less)",
-              patternOptions: { matchBase: true },
-              group: "object",
-            },
-            { pattern: "~/**", group: "internal", position: "after" },
-            { pattern: "../**", group: "parent", position: "before" },
-          ],
-          pathGroupsExcludedImportTypes: [
-            "builtin",
-            "external",
-            "object",
-            "type",
-          ],
-          distinctGroup: false,
         },
       ],
     },
   },
   {
     files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
-    plugins: {
-      "@typescript-eslint": tsEslint.plugin,
-    },
     languageOptions: {
       parser: tsEslint.parser,
     },
+    plugins: {
+      "@typescript-eslint": tsEslint.plugin,
+    },
     rules: {
-      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/consistent-type-imports": ["error", { fixStyle: "inline-type-imports" }],
       "@typescript-eslint/no-empty-interface": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
           destructuredArrayIgnorePattern: "^_",
           ignoreRestSiblings: true,
+          varsIgnorePattern: "^_",
         },
       ],
     },
-  }
+  },
 );
