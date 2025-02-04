@@ -7,12 +7,11 @@ version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
+    versioning-strategy: "increase"
     schedule:
       interval: "weekly"
     groups:
-      dev-dependencies:
-        patterns:
-          - "*"
-      dependencies:
-        patterns:
-          - "*"
+      dev-deps:
+        dependency-type: "development"
+      prod-deps:
+        dependency-type: "production"
