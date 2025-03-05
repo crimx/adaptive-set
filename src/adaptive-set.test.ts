@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { type AdaptiveSet, add, clear, has, isSingle, remove, size } from ".";
+import { type AdaptiveSet, add, clear, has, remove, size } from ".";
 
 describe("adaptive-set", () => {
   describe("add", () => {
@@ -9,7 +9,7 @@ describe("adaptive-set", () => {
 
       col = add(col, 1);
 
-      expect(isSingle(col)).toBe(true);
+      expect(Array.isArray(col)).toBe(true);
       expect([...col]).toEqual([1]);
     });
 
@@ -20,12 +20,12 @@ describe("adaptive-set", () => {
       col = add(col, 1);
       col = add(col, 1);
 
-      expect(isSingle(col)).toBe(false);
+      expect(Array.isArray(col)).toBe(false);
       expect(col).toBeInstanceOf(Set);
       expect([...col]).toEqual([1]);
 
       col = add(col, 2);
-      expect(isSingle(col)).toBe(false);
+      expect(Array.isArray(col)).toBe(false);
       expect(col).toBeInstanceOf(Set);
       expect([...col]).toEqual([1, 2]);
     });
@@ -47,16 +47,37 @@ describe("adaptive-set", () => {
 
       col = add(col, value);
 
-      expect(isSingle(col)).toBe(true);
+      expect(Array.isArray(col)).toBe(true);
       expect([...col]).toEqual([value]);
 
       col = remove(col, {});
 
-      expect(isSingle(col)).toBe(true);
+      expect(Array.isArray(col)).toBe(true);
       expect([...col!]).toEqual([value]);
 
       col = remove(col, value);
-      expect(col).toBeFalsy();
+      expect(size(col)).toBe(0);
+      expect(col).toBeTruthy();
+    });
+
+    it("should remove item from Single and add back", () => {
+      let col: AdaptiveSet<object>;
+
+      const value = {};
+
+      col = add(col, value);
+
+      expect(Array.isArray(col)).toBe(true);
+      expect([...col]).toEqual([value]);
+
+      col = remove(col, value);
+
+      expect(Array.isArray(col)).toBe(true);
+      expect([...col!]).toEqual([]);
+
+      col = add(col, value);
+      expect(Array.isArray(col)).toBe(true);
+      expect([...col!]).toEqual([value]);
     });
 
     it("should remove items from Set", () => {
@@ -66,7 +87,7 @@ describe("adaptive-set", () => {
       col = add(col, 2);
       col = add(col, 3);
 
-      expect(isSingle(col)).toBe(false);
+      expect(Array.isArray(col)).toBe(false);
       expect(col).toBeInstanceOf(Set);
       expect([...col]).toEqual([1, 2, 3]);
 
@@ -82,52 +103,33 @@ describe("adaptive-set", () => {
       col = remove(col, 3);
       expect([...col!]).toEqual([]);
     });
+  });
 
-    describe("clear", () => {
-      it("should clear empty", () => {
-        let col: AdaptiveSet<number>;
+  describe("clear", () => {
+    it("should clear empty", () => {
+      let col: AdaptiveSet<number>;
 
-        col = clear(col);
-        expect(col).toBeFalsy();
-      });
-
-      it("should clear single", () => {
-        let col: AdaptiveSet<number>;
-
-        col = add(col, 1);
-        col = clear(col);
-        expect(col).toBeFalsy();
-      });
-
-      it("should clear set and returns the cleared set", () => {
-        let col: AdaptiveSet<number>;
-
-        col = add(col, 1);
-        col = add(col, 2);
-        col = clear(col);
-        expect(col).toBeInstanceOf(Set);
-        expect(col).lengthOf(0);
-      });
+      col = clear(col);
+      expect(col).toBeFalsy();
     });
 
-    it("should drop Set when size is empty", () => {
+    it("should clear single", () => {
+      let col: AdaptiveSet<number>;
+
+      col = add(col, 1);
+      col = clear(col);
+      expect(size(col)).toBe(0);
+      expect(col).toBeTruthy();
+    });
+
+    it("should clear set and returns the cleared set", () => {
       let col: AdaptiveSet<number>;
 
       col = add(col, 1);
       col = add(col, 2);
-
-      expect(isSingle(col)).toBe(false);
+      col = clear(col);
       expect(col).toBeInstanceOf(Set);
-      expect([...col]).toEqual([1, 2]);
-
-      col = remove(col, 0, true);
-      expect([...col!]).toEqual([1, 2]);
-
-      col = remove(col, 1, true);
-      expect([...col!]).toEqual([2]);
-
-      col = remove(col, 2, true);
-      expect(col).toBeFalsy();
+      expect(col).lengthOf(0);
     });
   });
 
@@ -155,7 +157,7 @@ describe("adaptive-set", () => {
       col = add(col, 3);
       expect(size(col)).toBe(1);
 
-      col = remove(col, 3, true);
+      col = remove(col, 3);
       expect(size(col)).toBe(0);
     });
   });
@@ -184,7 +186,7 @@ describe("adaptive-set", () => {
       col = add(col, 3);
       expect(has(col, 3)).toBe(true);
 
-      col = remove(col, 3, true);
+      col = remove(col, 3);
       expect(has(col, 3)).toBe(false);
     });
   });
@@ -211,8 +213,9 @@ describe("adaptive-set", () => {
       col = add(col, 3);
       expect([...col]).toEqual([3]);
 
-      col = remove(col, 3, true);
-      expect(col).toBeFalsy();
+      col = remove(col, 3);
+      expect(size(col)).toBe(0);
+      expect(col).toBeTruthy();
     });
   });
 });
