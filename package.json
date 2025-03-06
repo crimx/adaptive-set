@@ -1,6 +1,6 @@
 {
   "name": "adaptive-set",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Utils for implementing a Set data structure that dynamically adjusts its internal representation based on the number of elements it contains.",
   "repository": "crimx/adaptive-set",
   "main": "./dist/index.js",

@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.2.0](https://github.com/crimx/adaptive-set/compare/v0.1.3...v0.2.0) (2025-03-06)
+
 ## [0.1.3](https://github.com/crimx/adaptive-set/compare/v0.1.2...v0.1.3) (2024-10-28)
 
 
