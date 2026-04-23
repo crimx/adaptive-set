@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/useConst: testing only */
+/** biome-ignore-all lint/style/noNonNullAssertion: testing only */
 import { describe, expect, it } from "vitest";
 
 import { type AdaptiveSet, add, clear, has, remove, size } from ".";
